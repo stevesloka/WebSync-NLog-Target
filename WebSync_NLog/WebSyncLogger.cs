@@ -17,18 +17,22 @@ namespace SteveSloka.WebSyncNLogTarget
         }
 
         public string WebSyncURL { get; set; }
+        public string WebSyncChannel { get; set; }
 
         protected override void Write(LogEventInfo logEvent)
         {
             string logMessage = this.Layout.Render(logEvent);
 
-            PublishMessageToWebSync(logMessage, "/GenuineChannels");  //TODO
+            PublishMessageToWebSync(logMessage, WebSyncChannel);  //TODO
         }
 
         public void PublishMessageToWebSync(string message, string channel)
         {
             //verify WebSyncURL ends with "/"
             if (!WebSyncURL.EndsWith("/")) WebSyncURL += "/";
+
+            //verify WebSyncChannel starts with "/"
+            if (!WebSyncChannel.StartsWith("/")) WebSyncChannel = "/" + WebSyncChannel;
 
             Publisher publisher = new Publisher(new PublisherArgs
             {
