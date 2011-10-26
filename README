@@ -1,0 +1,8 @@
+NLog Custom Target written by Steve Sloka to use FrozenMountain WebSync. 
+
+To Build:
+csc.exe /t:library /out:WebSyncLogger.dll /r:NLog.dll /r:FM.WebSync.Core.dll /r:FM.WebSync.Core.Json.dll WebSyncLogger.cs Payload.cs
+
+-=-=-=-=-=-=-=-
+Steve Sloka
+steve@stevesloka.com
