@@ -3,6 +3,13 @@ NLog Custom Target written by Steve Sloka to use FrozenMountain WebSync.
 To Build:
 csc.exe /t:library /out:WebSyncLogger.dll /r:NLog.dll /r:FM.WebSync.Core.dll /r:FM.WebSync.Core.Json.dll WebSyncLogger.cs Payload.cs
 
+To Use:
+
+1. Copy WebSyncLogger.dll to your bin directory
+2. Add Extension to NLog.config: <add assembly="WebSyncLogger"></add>
+3. Add Custom Target to NLog.config: <target name="ws" type="WebSyncLogger" WebSyncURL="http://<WebSyncURL>/"  layout="${longdate} ${level} ${message}"></target>
+4. Add Rule to NLog.config:  <logger name="*" minlevel="Trace" writeTo="ws" />
+
 -=-=-=-=-=-=-=-
 Steve Sloka
 steve@stevesloka.com
