@@ -21,9 +21,19 @@ namespace SteveSloka.WebSyncNLogTarget
 
         protected override void Write(LogEventInfo logEvent)
         {
-            string logMessage = this.Layout.Render(logEvent);
+            string logMessage = logEvent.Message;
+            
+            if (logMessage.StartsWith("[c:"))
+            {
+                string[] splitMsg = logMessage.Split(new char[] { '|' }, 1);
 
-            PublishMessageToWebSync(logMessage, WebSyncChannel);  //TODO
+                WebSyncChannel = splitMsg[0].Remove(0, 3); //remove the "[:c" from the beginning of message
+                logEvent.Message = splitMsg[1].Remove(0, WebSyncChannel.Length); //remove the channel name from the beginning of message
+            }
+
+            logMessage = this.Layout.Render(logEvent);
+
+            PublishMessageToWebSync(logMessage, WebSyncChannel);
         }
 
         public void PublishMessageToWebSync(string message, string channel)

@@ -58,6 +58,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /t:library /out:$(TargetDir)WebSyncLogger.dll /r:$(TargetDir)NLog.dll /r:$(TargetDir)FM.WebSync.Core.dll /r:$(TargetDir)FM.WebSync.Core.Json.dll $(ProjectDir)WebSyncLogger.cs $(ProjectDir)Payload.cs</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

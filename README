@@ -3,6 +3,9 @@ NLog Custom Target written by Steve Sloka to use FrozenMountain WebSync.
 To Build:
 csc.exe /t:library /out:WebSyncLogger.dll /r:NLog.dll /r:FM.WebSync.Core.dll /r:FM.WebSync.Core.Json.dll WebSyncLogger.cs Payload.cs
 
+OR:
+Create a post-build event in VS: C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /t:library /out:$(TargetDir)WebSyncLogger.dll /r:$(TargetDir)NLog.dll /r:$(TargetDir)FM.WebSync.Core.dll /r:$(TargetDir)FM.WebSync.Core.Json.dll $(ProjectDir)WebSyncLogger.cs $(ProjectDir)Payload.cs
+
 To Use:
 
 1. Copy WebSyncLogger.dll to your bin directory
