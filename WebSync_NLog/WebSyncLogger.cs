@@ -14,6 +14,7 @@ namespace SteveSloka.WebSyncNLogTarget
         public WebSyncLogger()
         {
             this.WebSyncURL = "http://localhost";
+            this.WebSyncChannel = "/GenuineChannels";
         }
 
         public string WebSyncURL { get; set; }
@@ -21,19 +22,19 @@ namespace SteveSloka.WebSyncNLogTarget
 
         protected override void Write(LogEventInfo logEvent)
         {
-            string logMessage = logEvent.Message;
+            string logMessage = logEvent.FormattedMessage;
             
             if (logMessage.StartsWith("[c:"))
             {
                 string[] splitMsg = logMessage.Split(new char[] { '|' }, 1);
 
                 WebSyncChannel = splitMsg[0].Remove(0, 3); //remove the "[:c" from the beginning of message
-                logEvent.Message = splitMsg[1].Remove(0, WebSyncChannel.Length); //remove the channel name from the beginning of message
+                //TODO logEvent.FormattedMessage = splitMsg[1].Remove(0, WebSyncChannel.Length); //remove the channel name from the beginning of message
             }
 
             logMessage = this.Layout.Render(logEvent);
 
-            PublishMessageToWebSync(logMessage, WebSyncChannel);
+            PublishMessageToWebSync(logEvent.FormattedMessage, WebSyncChannel);
         }
 
         public void PublishMessageToWebSync(string message, string channel)
