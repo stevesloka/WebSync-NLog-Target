@@ -23,18 +23,21 @@ namespace SteveSloka.WebSyncNLogTarget
         protected override void Write(LogEventInfo logEvent)
         {
             string logMessage = logEvent.FormattedMessage;
-            
-            if (logMessage.StartsWith("[c:"))
-            {
-                string[] splitMsg = logMessage.Split(new char[] { '|' }, 1);
-
-                WebSyncChannel = splitMsg[0].Remove(0, 3); //remove the "[:c" from the beginning of message
-                //TODO logEvent.FormattedMessage = splitMsg[1].Remove(0, WebSyncChannel.Length); //remove the channel name from the beginning of message
-            }
 
             logMessage = this.Layout.Render(logEvent);
+            
 
-            PublishMessageToWebSync(logEvent.FormattedMessage, WebSyncChannel);
+            if (logMessage.Contains("[c:"))
+            {
+                int startIndex = logMessage.IndexOf("[c:", 0);
+                int endIndex = logMessage.IndexOf("]", startIndex);
+
+                WebSyncChannel = logMessage.Substring(startIndex, endIndex - startIndex);
+                WebSyncChannel = WebSyncChannel.Remove(0, 3);
+                logMessage = logMessage.Remove(startIndex, (endIndex - startIndex) + 2);  //remove the channel name from the beginning of message
+            }
+
+            PublishMessageToWebSync(logMessage, WebSyncChannel);
         }
 
         public void PublishMessageToWebSync(string message, string channel)
@@ -60,6 +63,7 @@ namespace SteveSloka.WebSyncNLogTarget
             {
                 Console.WriteLine("Could not publish: " + publication.Error);
             }
+          
         }
     }
 }
